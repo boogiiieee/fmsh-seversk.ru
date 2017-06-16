@@ -1,0 +1,97 @@
+{% extends "olympiad.html" %}
+{% load chart_tags %}
+
+{% block title %}Журнал{% endblock %}
+{% block title_page %}Статистика за месяц{% endblock%}
+{% block block_content_top %}Выберите временной промежуток{% endblock%}
+
+{% block leftmenutop %}<a  href="/statistics/?subject_name={{ item.slug }}">{{ item.title }}</a>{% endblock%}
+{% block leftmenubottom %}
+	
+{% endblock%}
+{% block script %}
+	<script type="text/javascript">
+		$(function(){
+			$d3 = $('.scroll_big').jScrollPane({ autoReinitialise: true});
+
+			$( "#st_date" ).datepicker($.datepicker.regional["ru"]);
+			$( "#sp_date" ).datepicker($.datepicker.regional["ru"]);
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="text-block radius6 col1">
+        <div class="block-inner radius4">
+			<div class="scroll_big">
+				<div class="block-front">
+					<form id="statistik_form" action="" method="get" class="task">
+						<input type="text" name="st_date" id="st_date" value="{% if st_date %}{{ st_date|date:"d.m.Y" }}{% endif %}"/>
+						<input type="text" name="sp_date" id="sp_date" value="{% if sp_date %}{{ sp_date|date:"d.m.Y" }}{% endif %}"/> 
+						<input type="hidden" name="subject_name" value="{{ subject_name }}"/>
+						<input type="submit" class="but" value="Отправить"/>
+					</form>
+						
+					{% if statistics %}
+						<div class="chart">
+							{% for chart in charts %}
+								{% ChartCreate chart "400x200" %}
+							{% endfor %}
+						</div>
+						<div class="statistica big radius4 {% cycle 'f_left' 'f_right' %}">
+							{% for item in all_statistics %}
+								<h2>Статистика за все время</h2>
+								<ul class="list">
+								<li>
+									<h4 style="float:left">Времени на сервисе:&nbsp;</h4>
+									{{ item.time }} мин.
+								</li>
+								<li>
+									<h4 style="float:left">Пройденно олимпиад:&nbsp;</h4>
+									{{ item.lessons_learned }}
+								</li>
+								<li>
+									<h4 style="float:left">Выполнено практ. заданий:&nbsp;</h4>
+									{{ item.tasks_correct }}
+								</li>
+								<li>
+									<h4 style="float:left">Выявлено формул:&nbsp;</h4>
+									{{ item.added_formulas }}
+								</li>
+							{% endfor %}
+						</div>
+						{% regroup statistics by day as statistics_list %}
+						{% for day in statistics_list %}
+							<div class="statistica radius4 {% cycle 'f_left' 'f_right' %}">
+								{% for item in day.list %}
+									<h2>Статистика за {{ day.grouper|date:"d.m.Y" }}</h2>
+									<ul class="list">
+									<li>
+										<h4 style="float:left">Времени на сервисе:&nbsp;</h4>
+										{{ item.get_onlineuser.duration_of_visits|default:"0" }} мин.
+									</li>
+									<li>
+										<h4 style="float:left">Пройденно олимпиад:&nbsp;</h4>
+										{{ item.lessons_learned }}
+									</li>
+									<li>
+										<h4 style="float:left">Выполнено практ. заданий:&nbsp;</h4>
+										{{ item.tasks_correct }}
+									</li>
+																		
+									<li>
+										<h4 style="float:left">Выявлено формул:&nbsp;</h4>
+										{{ item.added_formulas }}
+									</li>
+								{% endfor %}
+							</div>
+						{% endfor %}
+					{% else %}
+						Статистики нет. Выполните олимпиадные задания.
+					{% endif %}
+					<div class="clr"></div>
+				</div>
+			</div>
+        </div>
+    </div>
+{% endblock%}

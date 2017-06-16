@@ -1,0 +1,72 @@
+{% extends "olympiad.html" %}
+{% load subject_user_tags %}
+
+{% block title %}Олимпиадные задания{% endblock %}
+{% block title_page %}Олимпиадные задания.{% endblock%}
+{% block block_content_top %}Олимпиадные задания{% endblock%}
+
+{% block script%}
+	<script type="text/javascript">
+		$(function(){
+			$d3 = $('.scroll_big').jScrollPane({autoReinitialise: true});
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="text-block radius6 col1 ">
+		<div class="block-inner radius4">
+			<div class="scroll_big">
+				<div class="block-front">
+					<div id="training_list" class="offset">
+						{% block content_text %}
+							{% if obj_list %}
+								<form id="statistik_form" name="search_form" action="" method="post" class="search task">{% csrf_token %}
+									{{ form.title }}
+									{{ form.date }}
+									<input type="submit" class="but f_right" name="submit_search_form" value="Поиск" onclick="change_search_form()">
+								</form>
+								<script>
+									function change_search_form(){
+										if(document.search_form.title.value == "Тема") document.search_form.title.value = "";
+										if(document.search_form.date.value == "Дата") document.search_form.date.value = "";
+									}
+								</script>
+								<table id="table_list" width='705px' class="otstup_bottom">
+									<tr>
+										<th class="th_first" width="10px"></th>
+										<th  width="570px">Тема</th>
+										<th  width="70px">Дата</th>
+										<th  width="50px">Сложность</th>
+										<th  width="23px">%</th>
+										<th class="th_last" width="10px"></th>
+									</tr>
+									{% block table %}
+										{% for item in obj_list %}
+											<tr {% if forloop.last %}class="tr_last"{% endif %}>
+												<td {% ifequal item|is_mastered:request.user_anonymous 'is_master'%}class="ok td_first" title="Освоено"{% else %}{% ifequal item|is_mastered:request.user_anonymous 'is_development'%}class="na_osvoenii td_first" title="На освоении" {% else %}class="td_first"{% endifequal %}{% endifequal %} ></td>
+												<td class="cursor_p">
+													<a href="{{ item.get_absolute_olympiad_url }}">
+														{{ item.title }}
+													</a>
+												</td>
+												<td>{{ item.date|date:"j N" }}</td>
+												<td>{{ item.complexity }}</td>
+												<td>{{ item|get_percent:auser }}</td>
+												<td class="td_last" width="10px"></td>
+											</tr>
+										{% endfor %}
+									{% endblock%}
+								</table>
+								{% include "paginate.html" %}
+							{% else %}
+								Список олимпиад пуст.
+							{% endif %}
+						{% endblock%}
+					</div>
+				<div class="clr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock%}

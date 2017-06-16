@@ -1,0 +1,23 @@
+{% extends "wide.html" %}
+
+{% block title %}Регистрация{% endblock %}
+{% block title_page %}Регистрация.{% endblock%}
+{% block block_content_top %}Оплата регистрации{% endblock%}
+
+{% block content %}
+	<script>
+		$.cookie('flag', 1, {path:'/'});
+	</script>
+	
+	<form method="post" action="{{ form.target }}">
+		<table>
+			{{ form.as_table }}
+		</table>
+		<input class="but" type="submit" value="Оплатить" />
+	</form>
+	
+	<div class="otstup_top">
+		<p>Оплатите регистрацию, чтобы Вам были доступны все разделы и функции сайта.</p>
+		<p>Стоимость регистрации на {{ cfg.duration_registration }} дней - {{ cfg.cost_registration }} рублей.</p>
+	</div>
+{% endblock%}

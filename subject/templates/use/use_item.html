@@ -1,0 +1,94 @@
+{% extends "use/use.html" %}
+{% load mformulas_tags %}
+{% load subject_user_tags %}
+
+{% block title %}ЕГЭ: {{ obj.title }}{% endblock %}
+{% block block_content_top %}{{ obj.title }}{% endblock%}
+
+{% block script %}
+	<script type="text/javascript">
+		$(function(){
+			$d3 = $('.scroll_big').jScrollPane({autoReinitialise: true});
+		});
+	</script>
+	<script src="{{ MEDIA_URL }}js/jquery.countdown.js"></script>
+	<script>
+		$(function(){
+			var ts = new Date({{ date_end|date:"Y,n-1,j,G,i,s" }});
+				
+			$('#countdown').countdown({
+				timestamp	: ts,
+				callback	: function(days, hours, minutes, seconds){
+					var message = "Осталось времени: ";
+					message += "<span class='blue radius4'>"+( hours < 10 ? '0':'' ) + hours + "</span>:";
+					message += "<span class='blue radius4'>"+( minutes < 10 ? '0':'' ) + minutes + "</span>:";
+					message += "<span class='blue radius4'>"+( seconds < 10 ? '0':'' ) + seconds+ "</span>";
+					if((new Date()) < ts) { $('#countdown').html(message); }
+				}
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block content_text %}
+	{% if obj_list or next %}
+		<div class="task_offset">
+			{% if obj_list.get_version_answer %}
+				<div id="countdown" class="buy radius4"></div>
+				<div class="clr"></div>
+				
+				<h5>{{ obj_list.text_task|safe|MFormula|MFLinjSubject:subject_name }}</h5>
+				<form style="text-align:center" action="" class="task">
+					<input type="hidden" name="next" value="{{ next }}">
+					<input type="hidden" name="answerr" value="1">
+					<input type="hidden" name="subject_name" value="{{ subject_name }}">
+					<table>
+						{% UseUserFound obj obj_list %}
+					</table>
+					<div class="clr"></div>
+					<input type="submit" class="but" value="Ответить">
+				</form>
+			{% else %}
+				{% if timeout %}
+					<p>Время закончилось!</p>
+				{% else %}
+					<p>Вы уверены, что хотите завершить ЕГЭ?</p>
+					<a href="results/?subject_name={{ subject_name }}" class="but">Завершить ЕГЭ</a>
+				{% endif %}
+			{% endif %}
+		</div>
+		<div class="clr"></div>
+		
+		<div id="paginate" class="otstup_top" style="text-align:center">
+			{% for p in usetasks %}
+				{% ifchanged p.level_task_use %}{% Var 1 %}{% else %}{% IncVar %}{% endifchanged %}
+				{% ifequal forloop.counter next %}
+					<span class="this-page" >{{ p.level_task_use }}{{ varx }}</span>
+				{% else %}
+					<a title="{{ p.task.title }}" class="{% TaskUseUserFound obj p.task %}" href="?next={{ forloop.counter0 }}&subject_name={{ subject_name }}">{{ p.level_task_use }}{{ varx }}</a>
+				{% endifequal %}
+			{% endfor %}
+			
+			{% ifequal next 'end' %}
+				<span class="this-page">завершить ЕГЭ</span>
+			{% else %}
+				<a title="Завершить ЕГЭ" href="?next=end&answerr=1&subject_name={{ subject_name }}">завершить ЕГЭ</a>
+			{% endifequal %}
+		</div>
+	{% else %}
+		<div class="text_offset">
+			{{ obj.text|safe|MFormula }}
+		</div>
+		<p>Продолжительность сдачи ЕГЭ: {{ obj.time|time:"H:i:s" }}.</p>
+		<a href="?next=start&subject_name={{subject_name}}" class="but" style="width:140px">Приступить к ЕГЭ</a>
+	{% endif %}
+	<script>
+		$(function(){
+			$('form.task').submit(function(){
+				var a = $('form.task input:radio[name=answer]:checked').attr('id');
+				$('#'+a).attr('name',a);
+				$('#'+a).attr('value','0');
+			});
+		});
+	</script>
+{% endblock%}

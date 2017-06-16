@@ -1,0 +1,25 @@
+{% extends "offset/offset.html" %}
+{% load mformulas_tags %}
+{% load subject_user_tags %}
+{% block title_page %}Результаты зачета{% endblock%}
+{% block title %}Результаты зачета{% endblock %}
+
+{% block content_text %}
+	<div id="training_list" class="offset">
+		{% if obj|offset_sdan:request.user_anonymous %}
+			<div class="green_block radius4">
+				Зачет сдан!
+			</div>
+		{% else %}
+			<div class="red_block radius4">
+				Зачет не сдан!
+			</div>
+			<a href="/subjects/offset/{{ obj.slug }}/?subject_name={{ subject_name }}" class="but">Сдать зачет</a>
+		{% endif %}
+		
+		{% if new_class %}
+			<p>Поздравляем! Вы перешли в новый класс!</p>
+		{% endif %}
+	</div>
+	<div class="clr"></div>
+{% endblock%}

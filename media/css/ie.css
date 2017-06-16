@@ -1,0 +1,30 @@
+/*#statistics a{
+	background:url(../img/button_active.png) no-repeat 66px -113px!important;
+}
+#training a{
+	background:url(../img/button_active.png) no-repeat 100px -113px!important;
+}
+#actions a{
+	background:url(../img/button_active.png) no-repeat 51px -113px!important;
+}*/
+#empty{
+	width:185px;
+}
+#dictionary a{
+	background:url(../img/button_active.png) no-repeat 72px -113px!important;
+}
+#statistics a{
+	background:url(../img/button_active.png) no-repeat 66px -113px!important;
+}
+#training a{
+	background:url(../img/button_active.png) no-repeat 99px -113px!important;
+}
+#actions a{
+	background:url(../img/button_active.png) no-repeat 51px -113px!important;
+}
+#training a{
+	background:url(../img/button_active.png) no-repeat 99px -113px!important;
+}
+#use a{
+	background:url(../img/button_active.png) no-repeat 34px -113px!important;
+}

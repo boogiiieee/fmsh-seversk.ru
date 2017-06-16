@@ -1,0 +1,6 @@
+#top_menu #offset span{
+	width:103px!important;
+}
+#offset a{
+	background:url(../img/button_active.png) no-repeat 103px -113px!important;
+}

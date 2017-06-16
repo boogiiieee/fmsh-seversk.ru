@@ -1,0 +1,151 @@
+{% extends "lesson/lesson.html" %}
+{% load mformulas_tags dictionary_tags %}
+
+{% block block_content_top %}{{ l.title }}{% endblock%}
+
+{% block script %}
+	
+	<script type="text/javascript">
+		$(function(){
+			$d1 = $("#d1").jScrollPane({autoReinitialise: true});
+			$d2 = $("#d2").jScrollPane({autoReinitialise: true});
+			
+			$('#d1').bind('jsp-scroll-y', function(event, scrollPositionY) {
+				$d2.data('jsp').scrollToY(scrollPositionY);
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	{% load subject_user_tags %}
+	<div class="text-block radius6 col2">
+        <div class="block-inner radius4">
+			<a class="add_bookmark" href="/lesson/bookmark/{{ l.id }}/" title="В закладки"><span class="sprite">В закладки</span></a>
+			<div class="scroll" id="d1" >
+				<div class="block-front">
+					{% block center %}
+						
+						{% if l.video %}
+							<div class="block_video">
+								<iframe src="/video/{{ l.id }}/{{ l.video.url }}/?subject_name={{ subject_name }}" width="512" height="333" align="left" frameborder="no">
+									Ошибка! Видео файл недоступен.
+								</iframe>
+							</div>
+						{% endif %}
+						
+						{{ l.text|safe|MFormula|MFLinjSubject:subject_name }}
+						
+						{% if l.get_task_list %}
+							<h2>Cписок задач:</h2>
+							<ul class="list">
+								{% for item in l.get_task_list %}
+									<li>
+										<h4 {% TaskLessonUserFound l item %}>{{ item.title }}</h4>
+										<span id="answer_res_{{ item.id }}" style="float:right;color:green"></span>
+										<div class="task_offset">
+											<h5>{{ item.text_task|safe|MFormula|MFLinjSubject:subject_name }}</h5>
+											<form style="text-align:center" class="task" action="" method="get">
+												<input type="hidden" name="subject_name" value="{{ subject_name }}">
+												<input type="hidden" name="lesson_id" value="{{ l.id }}">
+												<input type="hidden" name="task_id" value="{{ item.id }}">
+												
+												{% for answer in item.get_version_answer %}
+													{% ifnotequal answer.type_answer 'text' %}
+														<label for="answer_{{ answer.id }}" tabindex="{{ answer.id }}">
+															{{ answer.answer|safe|MFormula|MFLinjSubject:subject_name }}
+														</label>
+													{% endifnotequal %}
+													<input id="answer_{{ answer.id }}" class="f_left" type="{{ answer.type_answer }}" {% ifequal answer.type_answer 'radio' %} name="answer" {% else %} name="answer_{{ answer.id }}" {% endifequal %} {% ifequal answer.type_answer 'text' %}>{% else %}value="{{ answer.answer }}">{% endifequal %}
+												{% endfor %}
+												<div class="clr"></div>
+												
+												<input type="submit" class="but scroll-to-element-demo f_right" value="Ответить">
+												{% if l|get_text_solution:item %}
+													{% if item|buy_task:request.user_anonymous %}
+														<div class="clr"></div>
+														<div class="buy radius4 otstup_top">
+															<h2>Решение:</h2>
+															<div class="otstup_top">
+																{{ l|get_text_solution:item|safe|MFormula|MFLinjSubject:subject_name }}
+															</div>
+														</div>
+													{% else %}
+														<a class="but scroll-to-element-demo f_right otstup_right" style="width:130px" href="/accounts/analysis/?task={{ item.id }}&back={{ request.META.HTTP_REFERER }}">Купить решение</a>
+													{% endif %}
+												{% endif %}
+											</form>
+										</div>
+									</li>
+								{% endfor %}
+								<div class="clr"></div>
+							</ul>
+						{% endif %}
+						<div class="clr"></div>
+						<a class="but otstup_top" style="width:130px; margin-left:180px;float:none;" href="/subjects/lesson/?subject_name={{subject_name}}">Завершить урок</a>
+					{% endblock%}
+					<div class="clr"></div>
+				</div>
+			</div>
+        </div>
+    </div>
+
+	<div class="right_block text-block radius6 col2">
+		<div style="overflow:hidden; width:740px; height:365px; position:absolute; right:0; z-index:-1000;">
+			<div class="block-inner radius4" id="d2" >
+				<div id="mydictionary" class="block-front">
+					{% block right_menu %}
+						{% MFormulasDictionary dictionary_data 'lesson/dictionary_block.html' %}
+					{% endblock%}
+					<div class="clr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clr"></div>
+	
+	<script>
+		$(function(){
+			$('form.task').submit(function(){
+				var task_id = this.elements["task_id"].value;
+				var dataform = $(this).serialize();
+				$.ajax({
+					type: "GET",
+					url: "/subjects/lesson/task/results/",
+					data: dataform,
+					error: function(){},
+					success: function(data){
+						if (data == '1') {
+							$("#answer_res_" + task_id).html('&nbsp;Верно!');
+							$("#answer_res_" + task_id).prev().addClass('ok');
+							$("#answer_res_" + task_id).css('color','green');
+						} else {
+							$("#answer_res_" + task_id).html('&nbsp;Не верно!');
+							$("#answer_res_" + task_id).css('color','red');
+						};
+					}
+				});
+				return false;
+			});
+			
+			$('a.mformulas_link').click(function(){
+				$.ajax({
+					type: "GET",
+					url: $(this).attr("href"),
+					success: function(data){
+						$("#mydictionary").load("/mformulas/dictionary/?model_name=Lesson&obj_id={{ l.id }}");
+					}
+				});
+				return false;
+			});
+			$('a.add_bookmark').click(function(){
+				$.ajax({
+					type: "GET",
+					url: $(this).attr("href"),
+					success: function(data){ $("#dialog_add_bookmarks").dialog(); }
+				});
+				return false;
+			});
+		});
+	</script>
+{% endblock%}

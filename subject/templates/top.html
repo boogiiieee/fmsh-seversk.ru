@@ -1,0 +1,56 @@
+<div id="user_anonymous">
+	{% if user.is_authenticated %}
+		<div id="login">
+			<div id="d_p" class="radius4">
+				<h3>Добро пожаловать!</h3>
+				<h3>{{ request.user_anonymous.get_name }}</h3>
+			</div>
+			<div class="center_reg">Вы ученик {{ request.user_anonymous.get_level }} класса</div>
+			<div class="date_reg">
+				Дата регистрации {{ request.user_anonymous.user.date_joined|date:"d.m.Y"}}<br/>
+				Регистрация до {{ request.user_anonymous.user.profiles.get_date_balance|date:"d.m.Y" }}
+			</div>
+			<a href="/logout/" class="buttons"><span>Выйти</span></a>
+			<div class="clr"></div>
+		</div>
+		<a id="reg" class="pro_reg" href="/accounts/prolong/">Продлить регистрацию</a>
+		<a href="" id="show_hide" class="show_hide" title="Скрыть">&nbsp;</a>
+	{% else %}
+		<form id="login" method="post" action="/accounts/login/">{% csrf_token %}
+			<h3>Авторизация</h3>
+			{% if form_auth.errors %}
+				<div class="error"><h4>Имя пользователя или <br/>пароль не верны</h4></div>
+			{% endif %}
+			<div> 
+				{{ form_auth.username }}
+				{{ form_auth.password }}
+			</div> 
+			<a id="no_passw" href="/password/reset/">Забыли пароль?</a>
+			<input class="buttons" type="submit" value="Войти" />
+			<div class="clr"></div>
+		</form>
+		<a id="reg" href="/register/">Регистрация</a>
+		<a href="" id="show_hide" class="show_hide" title="Скрыть">&nbsp;</a>
+	{% endif %}
+	
+	<div id="hide_top_info" class="cloud" style="bottom:5px; right:30px;">
+		<div class="cloud_info">
+			<div class="item">
+				<h2>Справка</h2>
+				<p>Вы можете скрыть это окно.</p>
+			</div>
+		</div>
+		<div class="bottom_cloud"></div>
+	</div>
+	<script>
+		$(function(){
+			if ($.cookie('hide_top_info') != 1){
+				$("#hide_top_info").show();
+			}
+			$('#show_hide').click(function(){
+				$.cookie('hide_top_info', 1, {path:'/'});
+				$("#hide_top_info").hide();
+			});
+		});
+	</script>
+</div>

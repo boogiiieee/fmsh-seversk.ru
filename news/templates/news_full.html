@@ -1,0 +1,34 @@
+{% extends "news_all.html" %}
+{% load thumbnail %}
+
+{% block title %}Акция: {{ news_full.title }}{% endblock %}
+{% block title_page %}Новости и акции.{% endblock%}
+{% block block_content_top %}{{ news_full.title }}{% endblock%}
+
+
+{% block content %}
+	{% if news_full %}
+		<div class="news_item">
+			<h2>
+				<a href="{{ news_full.get_absolute_url }}">
+					{{ news_full.title }}
+				</a>
+			</h2>
+			<div class="date">
+				<span>{{ news_full.created_at|date:"d.m.Y" }}&nbsp;</span>
+			</div>
+			{% if news_full.image %}
+				{% thumbnail news_full.image "80x80" crop="center" format='PNG' as im %}
+					<img class="f_left" style="margin-right:10px;" src="{{ im.url }}" alt="{{ news_full.title }}" />
+				{% endthumbnail %}
+			{% endif %}
+			{{ news_full.text|safe }}
+		</div>
+		<div class="clr"></div>
+	{% else %}
+		Раздел в разработке.
+	{% endif %}
+	
+	<span class="rigth_link f_right"><a href="/actions/">Все акции</a></span>
+
+{% endblock %}

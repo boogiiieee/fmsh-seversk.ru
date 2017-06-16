@@ -1,0 +1,122 @@
+# -*- coding: utf-8 -*-
+
+from django import template
+from django.template import Node, NodeList, Template, Context, Variable
+from django.template import TemplateSyntaxError
+from django.template import get_library, Library, InvalidTemplateLibrary
+from django.utils.safestring import mark_safe
+import sys
+import re
+
+register = Library()
+
+from subject_user.models import UserTask
+from subject.models import Lesson, USE_Task, Task, Lesson_Task
+
+#######################################################################################################################
+#######################################################################################################################	
+
+#Создает переменную varx в шаблоне со значением
+class VarNode(Node):
+	def __init__(self, x):
+		self.x = template.Variable(x)
+
+	def render(self, context):
+		context['varx'] = self.x.resolve(context)
+		return u''
+
+def Var(parser, token):
+	bits = token.split_contents()
+	if len(bits) != 2:
+		raise TemplateSyntaxError(_("Error token tag \"Var\""))
+	return VarNode(bits[1])
+
+Var = register.tag(Var)
+
+#Увеличивает переменную varx в шаблоне на 1
+class IncVarNode(Node):
+	def render(self, context):
+		if 'varx' in context:
+			context['varx'] = int(context['varx']) + 1
+		return u''
+
+def IncVar(parser, token):
+	bits = token.split_contents()
+	if len(bits) != 1:
+		raise TemplateSyntaxError(_("Error token tag \"IncVar\""))
+	return IncVarNode()
+
+IncVar = register.tag(IncVar)
+
+#######################################################################################################################
+#######################################################################################################################
+
+#Выводит ответ пользователя в виде формы
+@register.filter(name='users_answer')
+def users_answer(value, qs):
+	return value.users_answer_form(qs)
+
+#Решена ли задача
+@register.filter(name='found_element_lesson')
+def found_element_lesson(value, who):
+	try:
+		whois = who.split("/")
+		if UserTask.objects.get(task__id = value, user__user__username = whois[0], lesson = Lesson.objects.get(slug=whois[3])).is_executed:
+			return True
+		else:
+			if UserTask.objects.get(task__id=value, user__anonymous=whois[0]).is_executed: return True
+			else: return False
+	except: return False
+
+###############################################
+	
+#Решена ли задача
+class TaskLessonUserFoundNode(template.Node):
+	def __init__(self, lesson, task):
+		self.lesson = template.Variable(lesson)
+		self.task = template.Variable(task)
+	def render(self, context):
+		if UserTask.objects.filter(task = self.task.resolve(context), user = context['request'].user_anonymous, lesson = self.lesson.resolve(context), is_executed = True).count() > 0:	
+			return 'class="ok"'
+		return ''
+
+def TaskLessonUserFound(parser, token):
+	bits = token.split_contents()
+	if len(bits) != 3:
+		raise TemplateSyntaxError(_("Error token tag \"TaskLessonUserFound\""))
+	return TaskLessonUserFoundNode(bits[1],bits[2])
+
+IncVar = register.tag(TaskLessonUserFound)	
+###############################################	
+#куплен ли ответ
+@register.filter(name='buy_task')
+def buy_task(value, who):
+	if UserTask.objects.filter(task = value, user = who, buy_answer=True).count() > 0:
+		return True
+	return False
+	
+#Текст решения
+@register.filter(name='get_text_solution')
+def get_text_solution(lesson, task):
+	try:
+		return Lesson_Task.objects.get(lesson=lesson,task=task).text_solution
+	except: pass	
+	
+#Верный ли ответ егэ
+@register.filter(name='true_task_use')
+def true_task_use(value, who):
+	if value=="":
+		return None
+	else:
+		whois = who.split(" ")
+		if value in whois:
+			return True
+		else:
+			return False
+
+#Процент выполнения урока
+@register.filter(name='get_percent')
+def get_percent(self, anonymous):
+	try:
+		return self.userlesson_set.filter(user=anonymous)[0].percent
+	except: return 0

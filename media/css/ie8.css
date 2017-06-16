@@ -1,0 +1,7 @@
+body {
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader( src='/media/img/sky_bg.jpg', sizingMethod='scale');
+    background-image:none;
+}
+.right_block .hover_formula{
+	background:#90B0C7!important;
+}

@@ -1,0 +1,21 @@
+{% extends "wide.html" %}
+
+{% block title %}Купить решение{% endblock %}
+{% block title_page %}Купить решение.{% endblock%}
+{% block block_content_top %}Купить решение задачи{% endblock%}
+
+{% block content %}
+	{% block content_text %}
+		<form method="post" action="{{ form.target }}">
+			<table>
+				{{ form.as_table }}
+			</table>
+			<input class="but" type="submit" value="Купить" />
+		</form>
+		
+		<div class="otstup_top">
+			<p>Стоимость покупки решения одной задачи cоставляет {{ cfg.cost_analysis }} рублей.</p>
+			<p>Нажмите кнопку "Купить" для перехода на страницу оплаты.</p>
+		</div>
+	{% endblock%}
+{% endblock %}

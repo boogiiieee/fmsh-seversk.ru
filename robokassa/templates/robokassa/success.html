@@ -1,0 +1,16 @@
+{% extends "wide.html" %}
+
+{% block title %}Оплата{% endblock %}
+{% block title_page %}Оплата.{% endblock%}
+{% block block_content_top %}Ошибка оплаты{% endblock%}
+
+{% block content %}
+	{% block content_text %}
+		<div>
+			<p class="f_left">Оплата прошла успешно!</p>
+			{% if back %}
+				<a class="but" href="{{ back }}{% if task %}#task{{ task }}{% endif %}">Продолжить обучение</a>
+			{% endif %}
+		</div>
+	{% endblock%}
+{% endblock %}

@@ -1,0 +1,35 @@
+body {
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader( src='/media/img/sky_bg.jpg', sizingMethod='scale');
+    background-image:none;
+}
+#left_menu #l_m_center .first.sub_menu_active {
+	background: url(../img/left_col.png) no-repeat -356px -2px!important;
+}
+#left_menu .podmenu .sub_menu_active {
+	background: url(../img/left_col.png) no-repeat -891px 0!important;
+}
+
+#left_menu .podmenu .last {
+	padding-bottom: 5px!important;
+	padding-top: 0px!important;
+}
+#left_menu #l_m_center .sub_menu_active{
+	background:url(../img/left_col.png) no-repeat -535px -9px!important;
+}
+#left_menu .podmenu .sub_menu_active.last{
+	color:white;
+	background:url(../img/left_col.png) no-repeat -1079px 0!important;
+	padding: 13px 15px 20px 20px;
+}
+#top_menu{
+	background-position:0 35px!important;
+}
+.right_block .hover_formula{
+	background:#90B0C7!important;
+}
+#content_all{
+	height:640px!important;
+}
+input.but{
+	margin-top:-40px!important;
+}

@@ -1,0 +1,9 @@
+{% extends "default.html" %}
+{% block title %}Предметы{% endblock %}
+	{% block content %}
+		<h2>{{ obj.title }}</h2>
+		Список уроков:
+			{% for item in obj.get_lesson_list %}
+				<a href="{{ item.get_absolute_url }}"><h2>{{ item.title }}</h2></a>
+			{% endfor %}
+	{% endblock%}

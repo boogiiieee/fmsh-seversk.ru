@@ -1,0 +1,51 @@
+{% extends "wide.html" %}
+
+
+{% block title %}Регистрация{% endblock %}
+{% block title_page %}Регистрация.{% endblock%}
+{% block block_content_top %}Заполните форму регистрации{% endblock%}
+{% block icon %}<a class="show_hide_1 show_reg" href="" title="Развернуть">Развернуть</a><br/>{% endblock%}
+
+{% block content %}
+	<form id="statistik_form" method="post" action="" class="task register">{% csrf_token %}
+		{% if form.username.errors %}
+			<div class="error">{{ form.username.errors }}</div>
+		{% endif %}
+		<div class="help_text">
+			{{ form.username }}
+			<div style="padding:3px 0;">Введите 30 символов или менее. Используйте только буквы, цифры и знаки из набора @/./+/-/_.</div>
+		</div>
+		<div class="clr"></div>
+		{% if form.level.errors %}
+			<div class="error">{{ form.level.errors }}</div>
+		{% endif %}
+		<div class="help_text">
+			{{ form.level }}
+			<div style="padding:10px 0;">Введите номер класса. Номер класс должен быть не менее 7 и не более 11.</div>
+		</div>
+		<div class="clr"></div>
+		{% if form.password1.errors %}
+			<div class="error">{{ form.password1.errors }}</div>
+		{% endif %}
+		<div class="help_text">
+			{{ form.password1 }}
+			<div style="padding:10px 0;">Введите пароль.</div>
+		</div>
+		<div class="clr"></div>
+		{% if form.password2.errors %}
+			<div class="error">{{ form.password2.errors }}</div>
+		{% endif %}
+		<div class="help_text">
+			{{ form.password2 }}
+			<div style="padding:10px 0;">{{ form.password2.help_text }}</div>
+		</div>
+		<div class="clr"></div>
+		{% if form.captcha.errors %}
+			<div class="error">{{ form.captcha.errors }}</div>
+		{% endif %}
+		{{ form.captcha }}
+		<div class="clr"></div>
+		<input class="but" type="submit" style="float:right;" value="Отправить" />
+		<div>* Все поля обязательны для заполнения.</div>
+	</form>
+{% endblock %}

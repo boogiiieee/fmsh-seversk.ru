@@ -1,0 +1,18 @@
+{% extends "default.html" %}
+
+{% block content %}
+	<div class="row">
+		<div class="name">
+			Активация
+		</div>
+		
+		<div class="block register">
+			{% if account %}
+				<p>Ваша учетная запись "{{ account }}" активирована. <a href="{% url auth_login %}">Войти</a> на сайт.</p>
+			{% else %}
+				<p>Ошибка активации учетной записи. Обратитесь к администратору.</p>
+			{% endif %}
+		<div>
+	</div>
+	<div class="clr">&nbsp;</div>
+{% endblock %}

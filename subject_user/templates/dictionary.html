@@ -1,0 +1,68 @@
+{% extends "default.html" %}
+{% load mformulas_tags %}
+{% block title %}Словарь{% endblock %}
+{% block title_page %}Словарь.{% endblock%}
+{% block block_content_top %}Список формул в словаре{% endblock%}
+
+{% block script%}
+	<script type="text/javascript">
+		$(function(){
+			$d3 = $('.scroll_big').jScrollPane({autoReinitialise: true});
+		});
+	</script>
+
+{% endblock %}
+
+{% block leftmenutop %}<a  href="/dictionary/?subject_name={{ item.slug }}">{{ item.title }}</a>{% endblock%}
+{% block leftmenubottom %}
+	<tr>
+		<td {% if not 'is_development' in put %}{% if not 'is_mastered' in put %}class="sub_menu_active"{% endif %}{% endif %} id="all">
+			<a href="/dictionary/">Все</a>
+		</td>
+	</tr>
+	<tr>
+		<td {% if 'is_development' in put %}class="sub_menu_active"{% endif %} id="development" >
+			<a href="/dictionary/?{% if subject_name %}subject_name={{ subject_name }}&{% endif %}is_development">На освоении</a>
+		</td>
+	</tr>
+	<tr>
+		<td {% if 'is_mastered' in put %}class="sub_menu_active last"{% endif %} id="mastered" class="last">
+			<a href="/dictionary/?{% if subject_name %}subject_name={{ subject_name }}&{% endif %}is_mastered">Освоенные</a>
+		</td>
+	</tr>
+
+{% endblock%}
+
+{% block content %}
+	<div class="text-block radius6 col1">
+        <div class="block-inner radius4">
+			<div class="scroll_big">
+				<div class="block-front">
+					<div id="dict" class="task_offset">
+						{% if obj_list %}
+							{% for item in obj_list %}
+								<div class="buy radius4 otstup_bottom">
+									<h4 {% if item.is_mastered %}class="ok" title="Освоено"{% else %}{% if item.is_development %}class="na_osvoenii" title="На освоении"{% endif %}{% endif %}>{{ item.formula.title }}</h4>
+									<div class="otstup_top">
+										{{ item.formula.get_formula }}
+									</div>
+									<div class="clr"></div>
+									<ul class="list dict_ul">
+										{% for i in item.get_lessons %}
+											<li><a href="{{ i.link }}"><h4>{{ i.title }}</h4></a></li>
+										{% endfor %}
+									</ul>
+									<div class="clr"></div>
+								</div>
+							
+							{% endfor %}
+						{% else %}
+							В Вашем словаре нет формул. Изучайте уроки и добавляйте формулы в словарь.
+						{% endif %}
+					</div>
+					<div class="clr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock%}

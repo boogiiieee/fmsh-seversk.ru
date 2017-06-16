@@ -1,0 +1,10 @@
+<h2>Друзья:</h2> 
+{% if friends %}
+	<ul class="list">
+		{% for friend in friends %}
+			<li><h4 style="float:left">{{ friend.username }}:</h4>&nbsp;{{ friend.email }}</li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>Вы не добавили ни одного друга.</p><p>Пожалуйста, воспользуйтесь формой "Пригласить друга".</p>
+{% endif %}

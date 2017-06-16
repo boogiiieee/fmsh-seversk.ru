@@ -1,0 +1,104 @@
+{% extends "offset/offset.html" %}
+{% load mformulas_tags %}
+{% load subject_user_tags %}
+{% block title %}Зачет: {{ obj.title }}{% endblock %}
+{% block title_page %}Сдавайте зачеты. Повышайте свой уровень.{% endblock%}
+{% block block_content_top %}{{ obj.title }}{% endblock%}	
+
+{% block script %}
+	<script type="text/javascript">
+		$(function(){
+			$d3 = $('.scroll_big').jScrollPane({autoReinitialise: true});
+		});
+	</script>
+	<script src="{{ MEDIA_URL }}js/jquery.countdown.js"></script>
+	<script>
+		$(function(){
+			var ts = new Date({{ date_end|date:"Y,n-1,j,G,i,s" }});
+				
+			$('#countdown').countdown({
+				timestamp	: ts,
+				callback	: function(days, hours, minutes, seconds){
+					var message = "Осталось времени: ";
+					message += "<span class='blue radius4'>"+( hours < 10 ? '0':'' ) + hours + "</span>:";
+					message += "<span class='blue radius4'>"+( minutes < 10 ? '0':'' ) + minutes + "</span>:";
+					message += "<span class='blue radius4'>"+( seconds < 10 ? '0':'' ) + seconds+ "</span>";
+					if((new Date()) < ts) { $('#countdown').html(message); }
+				}
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block content_text %}
+	{% if obj_list or next %}
+		<div class="task_offset">
+			{% if obj_list.get_version_answer %}
+				<div id="countdown" class="buy radius4"></div>
+				<div class="clr"></div>
+				
+				<h5>{{ obj_list.text_task|safe|MFormula|MFLinjSubject:subject_name }}</h5>
+				<form style="text-align:center" class="task" action="" method="get">
+					<input type="hidden" name="next" value="{{ next }}">
+					<input type="hidden" name="subject_name" value="{{ subject_name }}">
+					<input type="hidden" name="answerr" value="1">
+					<table>
+						{% for item1 in obj_list.get_version_answer %}
+							<tr>
+								<td {% ifequal item1.type_answer 'checkbox' %}width="0px"{% else %}width="30px"{% endifequal %}>
+									<input class="f_left" id="answer_{{ item1.id }}" type="{{ item1.type_answer }}" {% ifequal item1.type_answer 'radio' %} name="answer" {% else %} name="answer_{{ item1.id }}" {% endifequal %} {% ifequal item1.type_answer 'text' %}>{% else %}value="{{ item1.answer }}">{% endifequal %}
+								</td>
+								<td>
+									{% ifequal item1.type_answer 'text' %}{% else %}<label class="f_left" for="answer_{{ item1.id }}" tabindex="{{ item1.id }}">{{ item1.answer|safe|MFormula|MFLinjSubject:subject_name }}</label><div class="clr"></div>{% endifequal %}
+								</td>
+							</tr>
+						{% endfor %}
+					</table>
+					<div class="clr"></div>
+					<input type="submit" class="but" value="Ответить">
+				 </form>
+			{% else %}
+				{% if timeout %}
+					<p>Время закончилось!</p>
+				{% else %}
+					<p>Вы уверены, что хотите завершить зачет?</p>
+				{% endif %}
+				<a style="width:140px" href="results/?subject_name={{ subject_name }}" class="but">Завершить зачет</a>
+			{% endif %}
+		</div>
+		<div class="clr"></div>
+		
+		<div id="paginate" class="otstup_top" style="text-align:center">
+			{% for p in tasks %}
+				{% ifequal forloop.counter next %}
+					<span class="this-page" >{{ forloop.counter }}</span>
+				{% else %}
+					<a title="{{ p.title }}" class="{% TaskOffsetUserFound obj p %}" href="?next={{ forloop.counter0 }}&subject_name={{ subject_name }}">{{ forloop.counter }}</a>
+				{% endifequal %}
+			{% endfor %}
+			{% ifequal next 'end' %}
+				<span class="this-page" >завершить зачет</span>
+			{% else %}
+				<a title="Завершить зачет" href="?next=end&answerr=1&subject_name={{ subject_name }}">завершить зачет</a>
+			{% endifequal %}
+		</div>
+	{% else %}
+		<div class="text_offset">
+			{{ obj.text|safe|MFormula }}
+		</div>
+		<p>Продолжительность сдачи зачета: {{ obj.time|time:"H:i:s" }}.</p>
+		<p>Вам нужно выполнить не менее {{ obj.percent }}% заданий.</p>
+		<a href="?next=start&subject_name={{subject_name}}" class="but">Сдать зачет</a>
+	{% endif %}
+	
+	<script>
+		$(function(){
+			$('form.task').submit(function(){
+				var a = $('form.task input:radio[name=answer]:checked').attr('id');
+				$('#'+a).attr('name',a);
+				$('#'+a).attr('value','0');
+			});
+		});
+	</script>
+{% endblock%}
+

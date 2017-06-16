@@ -1,0 +1,45 @@
+{% extends "lesson/lesson.html" %}
+{% block title %}Закладки{% endblock %}
+{% block title_page %}Закладки.{% endblock%}
+{% block block_content_top %}Выберете закладку{% endblock%}	
+{% block content %}
+	<div class="text-block radius6 col1 ">
+		<div class="block-inner radius4">
+			<div class="scroll_big">
+				<div class="block-front">
+					<div id="training_list" class="offset">
+						{% block content_text %}
+							{% if obj_list%}
+								<table id="table_list" width='705px' class="otstup_bottom">
+									<tr>
+										<th class="th_first" width="10px"></th>
+										<th width="450px">Тема</th>
+										<th width="100px">Дата</th>
+										<th width="50px">Удалить</th>
+										<th class="th_last" width="10px"></th>
+									</tr>
+									{% for item in obj_list %}
+										<tr {% if forloop.last %}class="tr_last"{% endif %}>
+											<td class="td_first"></td>
+											<td class="cursor_p">
+												<a href="{{ item.lesson.get_absolute_url }}">{{ item.lesson }}</a>
+											</td>
+											<td>{{ item.date_bookmark|date:"d.m.Y" }}</td>
+											<td class="cursor_p" style="text-align:center"><a  href="?delete={{ item.lesson.id }}&subject_name={{ subject_name }}"><img src="{{ MEDIA_URL }}/img/ico-tain-no.png" title="Удалить"></a></td>
+											<td class="td_last" width="10px"></td>
+										</tr>
+									{% endfor %}
+								</table>
+								{% include "paginate.html" %}
+							{% else %}
+								Вы не добавили ни одной закладки.
+							{% endif %}
+						{% endblock%}
+					</div>
+				<div class="clr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+{% endblock%}

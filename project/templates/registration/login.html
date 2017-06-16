@@ -1,0 +1,25 @@
+{% extends "wide.html" %}
+
+{% block title %}Авторизация{% endblock %}
+{% block title_page %}Авторизация.{% endblock%}
+{% block block_content_top %}Авторизация дает доступ к полному функционалу сайта{% endblock%}
+
+{% block content %}
+	<div style="margin-bottom:10px">
+		<h2 align="center">Доступ к разделу имеют только зарегистрированные пользователи.</h2> 
+		</p>Пожалуйста, войдите под своей учетной записью или <a href="/register/">зарегистрируйтесь</a>.</p>
+	</div>
+	<form id="login" method="post" action="">{% csrf_token %}
+		<h3>Авторизация</h3>
+		{% if form.errors %}
+			<div class="error"><h4>Имя пользователя или <br/>пароль не верны</h4></div>
+		{% endif %}
+		<div> 
+			{{ form_auth.username }}
+			{{ form_auth.password }}
+		</div> 
+		<a id="no_passw" href="/password/reset/">Забыли пароль?</a>
+		<input class="buttons" type="submit" value="Войти" />
+		<div class="clr"></div>
+	</form>
+{% endblock %}

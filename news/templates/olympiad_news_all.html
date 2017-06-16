@@ -1,0 +1,40 @@
+{% extends "olympiad_activity.html" %}
+{% load thumbnail %}
+
+{% block title %}Акции{% endblock %}
+{% block title_page %}Новости и акции.{% endblock%}
+{% block block_content_top %}Новости и акции{% endblock%}
+
+{% block content %}
+	{% if user.is_authenticated %}
+		<a class="but" id="invitefriend" href="/accounts/prolong/" style="width:200px">Продлить регистрацию</a>
+	{% else %}
+		<a href="/register/" class="but">Регистрация</a>
+	{% endif %}
+	<div class="clr"></div>
+	
+	{% if news_list %}
+		{% for news_item in news_list %}
+			<div class="news_item">
+				<h2>
+					<a href="{{ news_item.get_absolute_olympiad_url }}">
+						{{ news_item.title }}
+					</a>
+				</h2>
+				<div class="date">
+					<span>{{ news_item.created_at|date:"d.m.Y" }}&nbsp;</span>
+				</div>
+				{% if news_item.image %}
+					{% thumbnail news_item.image "80x80" crop="center" format='PNG' as im %}
+						<img class="f_left" style="margin-right:10px;" src="{{ im.url }}" alt="{{ news_item.title }}" />
+					{% endthumbnail %}
+				{% endif %}
+				
+				<p>{{ news_item.announcement|safe }}<span class="rigth_link"><a href="{{ news_item.get_absolute_olympiad_url }}">читать далее</a></span></p>
+			</div>
+			<div class="clr"></div>
+		{% endfor %}
+	{% endif %}
+	
+	{% include "olympiad_paginate.html" %}
+{% endblock %}

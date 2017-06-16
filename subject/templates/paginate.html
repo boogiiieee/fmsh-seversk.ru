@@ -1,0 +1,17 @@
+{% load paginate %}
+
+{% if is_paginated %}
+<div id="paginate">
+	{% paginate_split_list page_range page %}
+		{% for interval,more in paginate_page_range %}
+			{% for p in interval %}
+				{% ifequal p page %}
+					<span class="this-page">{{ p }}</span>
+				{% else %}
+					<a href="{{ href }}?page={{ p }}{{ get }}&subject_name={{ subject_name }}">{{ p }}</a>
+				{% endifequal %}
+			{% endfor %}
+			{% if more %}&nbsp; ... &nbsp;{% endif %}
+		{% endfor %}
+</div>
+{% endif %}

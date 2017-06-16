@@ -1,0 +1,43 @@
+{% extends "default.html" %}
+{% load mformulas_tags url_tags training_onlineuser_tags %}
+{% block script%}
+	<script type="text/javascript">
+		$(function()
+			{
+				$d3 = $('.scroll_big').jScrollPane({	autoReinitialise: true});
+			});
+	</script>
+{% endblock %}
+{% block title %}Тренировка{% endblock %}
+{% block title_page %}Выполняйте тренировочные задания. Запоминайте формулы.{% endblock%}
+{% block block_content_top %}Тренировки{% endblock%}	
+{% block leftmenutop %}<a  href="/training/?subject_name={{ item.slug }}">{{ item.title }}</a>{% endblock%}
+{% block leftmenubottom %}
+
+{% endblock%}
+{% block content %}
+	<div class="text-block radius6 col1 ">
+        <div class="block-inner radius4">
+			<div class="scroll_big">
+				<div class="block-front">
+					<div id="training_list" class="offset">
+						{% block content_text %}
+							<p>В этом разделе Вы можете учить формулы, которые добавлены в Ваш личный словарь.</p>
+							<p>Чтобы начать тренировку, выберите предмет:</p>
+							<ul class="list">
+								{% for item in subject_list %}
+									<li><a  href="/training/?subject_name={{ item.slug }}"><h4>{{ item.title }}</h4></a></li>
+								{% endfor %}
+							</ul>
+						{% endblock %}
+					</div>
+					<div class="clr"></div>
+				</div>
+			</div>
+        </div>
+    </div>
+{% endblock%}
+
+{% block extra %}
+	{% TrainingOnlineUserMedia %}
+{% endblock %}

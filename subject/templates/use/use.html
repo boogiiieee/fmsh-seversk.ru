@@ -1,0 +1,71 @@
+{% extends "index.html" %}
+{% load subject_user_tags %}
+
+{% block title %}ЕГЭ{% endblock %}
+{% block title_page %}Сдавайте ЕГЭ. Улучшайте знания.{% endblock%}
+{% block block_content_top %}Выберите подходящий ЕГЭ из списка.{% endblock%}	
+{% block script%}
+	<script type="text/javascript">
+		$(function(){
+			$d3 = $('.scroll_big').jScrollPane({ autoReinitialise: true });
+		});
+	</script>
+
+{% endblock %}
+{% block leftmenutop %}<a  href="/subjects/use/?subject_name={{ item.slug }}">{{ item.title }}</a>{% endblock%}
+{% block leftmenubottom %}
+	<tr>
+		<td {% if subject_name %}{% if not 'is_executed' in put %}class="sub_menu_active"{% endif %}{% endif %} id="all">
+			<a href="/subjects/use/">Все ЕГЭ</a>
+		</td>
+	</tr>
+	<tr>
+		<td {% if 'is_executed' in put %}class="sub_menu_active last"{% else %}class="last"{% endif %} id="mastered" >
+			<a href="/subjects/use/?{% if subject_name %}subject_name={{ subject_name }}&{% endif %}is_executed">Освоенные</a>
+		</td>
+	</tr>
+
+{% endblock%}
+
+{% block content %}
+	<div class="text-block radius6 col1 ">
+		<div class="block-inner radius4">
+			<div class="scroll_big">
+				<div class="block-front">
+					<div id="training_list" class="offset">
+						{% block content_text %}
+							{% if obj_list %}
+								<table id="table_list" width='705px' class="otstup_bottom">
+									<tr>
+										<th class="th_first" width="10px"></th>
+										<th width="450px">ЕГЭ</th>
+										<th  width="150px">Предмет</th>
+										<th  width="83px">Время</th>
+										<th class="th_last" width="10px"></th>
+									</tr>
+									{% for item in obj_list %}
+										<tr {% if forloop.last %}class="tr_last"{% endif %}>
+											<td {% ifequal item|use_is_mastered:request.user_anonymous 'is_master'%}class="ok td_first" title="Освоено"{% endifequal %}></td>
+											<td class="cursor_p">
+												<a href="{{ item.get_absolute_url }}">
+													{{ item.title }}
+												</a>
+											</td>
+											<td>{{ item.subject.title }}</td>
+											<td>{{ item.time }}</td>
+											<td class="td_last" width="10px"></td>
+										</tr>
+									{% endfor %}
+								</table>
+								{% include "paginate.html" %}
+							{% else %}
+								Нет доступных ЕГЭ.
+							{% endif %}
+						{% endblock%}
+					</div>
+					<div class="clr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock%}

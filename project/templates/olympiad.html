@@ -1,0 +1,54 @@
+{% extends "default.html" %}
+
+{% block topmenu %}
+	<ul>
+		<li id="olympiad"><a href="/olympiad/lesson/"><span>Олимпиадные задания</span></a></li>
+		<li id="statistics"><a href="/statistics/olympiad/"><span>Журнал</span></a></li>
+		<li id="activity"><a href="/activity/olympiad/"><span>Активность</span></a></li>
+		<li id="actions"><a href="/actions/olympiad/"><span>Акции</span></a></li>
+		<li id="empty_olympiad"></li>
+	</ul>
+{% endblock%}
+
+{% block leftmenu %}
+	<div id="left_menu">
+		<!--предметы-->
+		<div id="l_m_top">&nbsp;</div >
+		<div id="l_m_center">
+			<table class="left_table">
+				<tbody>
+					{% for item in olympiad_list %}
+						<tr {% if forloop.first %}class="first"{% endif %}>
+							<td class="subject {% ifequal subject_name item.slug %}sub_menu_active{% endifequal %} {% if forloop.first %}first{% endif %}">{% block leftmenutop %}<a href="/olympiad/lesson/?subject_name={{ item.slug }}">{{ item.title }}</a>{% endblock%}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+		</div>
+		
+		<table class="left_table podmenu">
+			<tbody>
+				{% block leftmenubottom %}
+					<tr>
+						<td {% if subject_name %}{% if 'is_development' in put %}{% else %}{% if 'is_mastered' in put %}{% else %}{% if 'bookmark' in put %}{% else %}class="sub_menu_active"{% endif %}{% endif %}{% endif %}{% endif %} id="all">
+							<a href="/olympiad/lesson/?{% if subject_name %}subject_name={{ subject_name }}{% endif %}">Все</a>
+						</td>
+					</tr>
+					<tr>
+						<td {% if 'is_development' in put %}class="sub_menu_active"{% endif %}id="development">
+							<a href="/olympiad/lesson/?{% if subject_name %}subject_name={{ subject_name }}&{% endif %}is_development">На освоении</a>
+						</td>
+					</tr>
+					<tr>
+						<td {% if 'is_mastered' in put %}class="sub_menu_active last"{% endif %}id="mastered" class="last">
+							<a href="/olympiad/lesson/?{% if subject_name %}subject_name={{ subject_name }}&{% endif %}is_mastered">Освоенные</a>
+						</td>
+					</tr>
+
+
+				{% endblock%}
+			</tbody>
+		</table>
+	</div>
+{% endblock%}

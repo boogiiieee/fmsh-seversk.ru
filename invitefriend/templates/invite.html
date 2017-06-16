@@ -1,0 +1,18 @@
+{% extends "activity.html" %}
+{% load mformulas_tags onlineuser_tags invitefriends_tags %}
+{% block title %}Пригласить друга{% endblock %}
+{% block title_page %}Пригласить друга{% endblock%}
+{% block block_content_top %}Пригласить друга{% endblock%}
+{% block content %}
+	<div class="statistica radius4 f_left" style="width:402px;">
+		<h2>Введите email друга</h2> 
+		<form id="statistik_form" class="otstup_top search task" action="" method="post">{% csrf_token %}
+			<div class="error">{% if form.email.errors %}{{ form.email.errors }}{% endif %}</div>
+			{{ form.email }}
+			<input type="submit" class="but" value="Пригласить">
+		</form>
+	</div>
+	<div class="statistica radius4 f_right" style="width:402px; min-height: 81px;">
+		{% InviteFriensList %}
+	</div>
+{% endblock %}

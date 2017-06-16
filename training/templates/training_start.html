@@ -1,0 +1,58 @@
+{% extends "training_info.html" %}
+{% load mformulas_tags url_tags %}
+
+{% block title %}Тренировка{% endblock %}
+{% block title_page %}Выполняйте тренировочные задания. Запоминайте формулы.{% endblock%}
+{% block block_content_top %}Укажите недостающий элемент формулы{% endblock%}	
+	
+{% block content_text %}
+		{% if question %}
+			<div id="training_list">
+					<h2>{{ question.question }}</h2>
+					<div class="tex">{{ question.get_question }}</div>
+					<div class="clr"></div>
+					<div class="training_block" id="training_button">
+						<a class="training_answer" id="0" href="">Не знаю</a>
+					</div>
+					{% for answer in question.get_answers %}
+						<div class="training_block">
+							<a class="training_answer_{{ answer.id }}" id="{{ answer.id }}" href="">{{ answer.get_answer }}</a>
+						</div>
+						<div class="clr"></div>
+					{% endfor %}
+			</div>			
+			<script>
+				var training_active = true;
+				
+				$(function(){
+					$("a[class^=\"training_answer\"]").click(function(){
+						if(training_active){
+							var this_id = $(this).attr("id");
+							$.ajax({
+								type: "GET",
+								url: "/training/check/{{ dictionary.id }}/{{ question.id }}/"+$(this).attr("id")+"/",
+								beforeSend: function(){},
+								error: function(){},
+								success: function(data){
+									if(this_id == data){
+										$(".training_answer_"+this_id).parent("div").addClass('true');
+										$(".training_block").addClass('no_active');
+									} else {
+										$(".training_answer_"+this_id).parent("div").addClass('false');
+										$(".training_answer_"+data).parent("div").addClass('true');
+										$(".training_block").addClass('no_active');
+									};
+									$("#training_button").removeClass('no_active');
+								}
+							});
+							$("#training_button").html('<a id="training_next_button" href="{% get_url "page" next_page %}">Далее</a>');
+							training_active = false;
+						}
+						return false;
+					});
+				});
+			</script>
+		{% else %}
+			Нет формул для тренировки. Изучайте уроки. Добавляйте формулы в словарь.
+		{% endif %}
+{% endblock%}

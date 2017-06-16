@@ -1,0 +1,46 @@
+{% extends "olympiad.html" %}
+{% block script%}
+	<script type="text/javascript">
+		$(function(){
+			$d3 = $('.scroll_big').jScrollPane({autoReinitialise: true});
+		});
+	</script>
+{% endblock %}
+{% block all_page %}
+	<div id="conteyner_big">
+		{% block top %}
+			{% include "top.html" %}
+		{% endblock%}
+			
+		<div {% if request.user.is_anonymous %} style="display:none;"{% endif %} id="bg_block_content_top">
+			<div><div><h3>{% block block_content_top %}Продление регистрации{% endblock%}{% block icon %}<a class="show_reg show_hide_1" href="" title="Показать">Показать</a><br/>{% endblock%}</h3></div></div>
+		</div>
+		
+		<script>
+			$(function(){
+				$('#show_hide').click(
+					function(){
+						$(this).parent().css("display", "none");
+						$(this).parent().next().css("display", "block");
+						$('#block_content').removeClass("min_block_content");
+						$('#block_content').addClass("max_block_content");
+				});
+			});
+		</script>
+				
+		<div id="block_content" {% if request.user.is_anonymous %}class="min_block_content"{% else %}class="max_block_content"{% endif %}>
+			<div class="text-block radius6 col1">
+				<div class="block-inner radius4">
+					<div class="scroll_big">
+						<div class="block-front">
+							{% block content %}{% endblock%}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="bg_block_content_bottom">
+			<div><div>&nbsp;</div></div>
+		</div>
+	</div>
+{% endblock%}

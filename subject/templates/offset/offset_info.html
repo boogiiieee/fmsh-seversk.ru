@@ -1,0 +1,27 @@
+{% extends "offset/offset.html" %}
+{% block title_page %}Информация о последних пройденных зачетах{% endblock%}
+{% block block_content_top %}Информация о последних пройденных зачетах{% endblock%}
+{% block content_text %}
+	{% if obj %}
+		<table id="table_list" width='705px'>
+			<tr>
+				<th class="th_first" width="20px"></th>
+				<th width="420px">Тема зачета</th>
+				<th  width="120px">Предмет</th>
+				<th  width="120px">Дата сдачи</th>
+				<th class="th_last" width="10px"></th>
+			</tr>
+			{% for item in obj %}
+				<tr {% if forloop.last %}class="tr_last"{% endif %}>
+					<td class="td_first">{% if item.is_executed %}<img src='{{ MEDIA_URL }}img/ok.png' title="Зачет сдан">{% endif %}</td>
+					<td>{{ item.offset.title }}</td>
+					<td>{{ item.offset.subject.title }}</td>
+					<td>{{ item.date_delivery|date:"d.m.Y" }}</td>
+					<td class="td_last" width="10px"></td>
+				</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+		{% block else %}Нет пройденных зачетов. Вам необходимо изучить уроки и сдать зачеты.{% endblock%}
+	{% endif %}
+{% endblock%}

@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+{% load mformulas_tags %}
+
+<html lang="ru">
+	<head>
+		<title>Редактор формул Latex</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		
+		<link rel="SHORTCUT ICON" href="{{ MEDIA_URL }}img/favicon.ico" type="image/x-icon">
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/default.css">
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.7.1.min.js"></script>
+
+		<style type="text/css">
+			.symbol { 
+				cursor:pointer;
+			}
+		</style>
+  
+		{% MFormulasMedia %}
+	</head>
+	
+	<body scroll="no" style="background:white;">
+		<table style="margin-left:10px">
+			<tr>
+				<td>
+					<form action="" method="post" style="margin-top:10px">
+						<label for="formula_latex" style="font-weight:bold">Формула Latex:</label><br/>
+						<textarea id="formula_latex" style="width:500px;height:200px;">{{ val }}</textarea><br/>
+						<input id="return_submit" type="submit" value="Вставить формулу" />
+						<input id="preview_bt" type="button" value="Предпросмотр" />
+					</form>
+					
+					<iframe id="preview_frame" src="" width="500" height="200" align="left" style="margin-top:10px;border:1px solid #000">
+						Ваш браузер не поддерживает плавающие фреймы!
+					</iframe>
+				</td>
+				
+				<td>
+					<div style="margin:20px 0 0 10px;width:200px;height:440px;border:1px solid #000;overflow:auto">
+						<div class="symbol" id="+">$$+$$<div/>
+						<div class="symbol" id="-">$$-$$<div/>
+						<div class="symbol" id="\setminus">$$\setminus$$<div/>
+						<div class="symbol" id="\pm">$$\pm$$<div/>
+						<div class="symbol" id="\mp">$$\mp$$<div/>
+						<div class="symbol" id="\div">$$\div$$<div/>
+						<div class="symbol" id="/">$$/$$<div/>
+						<div class="symbol" id="\ast">$$\ast$$<div/>
+						<div class="symbol" id="\ne">$$\ne$$<div/>
+						<div class="symbol" id="=">$$=$$<div/>
+						<div class="symbol" id="\equiv">$$\equiv$$<div/>
+						<div class="symbol" id="\cdots">$$\cdots$$<div/>
+						<div class="symbol" id="\approx">$$\approx$$<div/>
+						<div class="symbol" id="<">$$<$$<div/>
+						<div class="symbol" id=">">$$>$$<div/>
+						<div class="symbol" id="\ll">$$\ll$$<div/>
+						<div class="symbol" id="\gg">$$\gg$$<div/>
+						<div class="symbol" id="\leq">$$\leq$$<div/>
+						<div class="symbol" id="\geq">$$\geq$$<div/>
+						<div class="symbol" id="\leftarrow">$$\leftarrow$$<div/>
+						<div class="symbol" id="\rightarrow">$$\rightarrow$$<div/>
+						<div class="symbol" id="\leftrightarrow">$$\leftrightarrow$$<div/>
+						<div class="symbol" id="\Leftarrow">$$\Leftarrow$$<div/>
+						<div class="symbol" id="\Rightarrow">$$\Rightarrow$$<div/>
+						<div class="symbol" id="\Leftrightarrow">$$\Leftrightarrow$$<div/>
+						<div class="symbol" id="\nearrrow">$$\nearrow$$<div/>
+						<div class="symbol" id="\searrow">$$\searrow$$<div/>
+						<div class="symbol" id="\swarrow">$$\swarrow$$<div/>
+						<div class="symbol" id="\nwarrow">$$\nwarrow$$<div/>
+						<div class="symbol" id="\lbrack">$$\lbrack$$<div/>
+						<div class="symbol" id="\rbrack">$$\rbrack$$<div/>
+						<div class="symbol" id="\lbrace">$$\lbrace$$<div/>
+						<div class="symbol" id="\rbrace">$$\rbrace$$<div/>
+						
+						<div class="symbol" id="{a}^{b}">$${a}^{b}$$<div/>
+						<div class="symbol" id="{a}_{b}">$${a}_{b}$$<div/>
+						<div class="symbol" id="\frac{a}{b}">$$\frac{a}{b}$$<div/>
+						<div class="symbol" id="f\{x\}">$$f\{x\}$$<div/>
+						<div class="symbol" id="\arg{x}">$$\arg{x}$$<div/>
+						<div class="symbol" id="\cos{x}">$$\cos{x}$$<div/>
+						<div class="symbol" id="\cosh{x}">$$\cosh{x}$$<div/>
+						<div class="symbol" id="\cot{x}">$$\cot{x}$$<div/>
+						<div class="symbol" id="\coth{x}">$$\coth{x}$$<div/>
+						<div class="symbol" id="\csc{x}">$$\csc{x}$$<div/>
+						<div class="symbol" id="\det{x}">$$\det{x}$$<div/>
+						<div class="symbol" id="\dim{x}">$$\dim{x}$$<div/>
+						<div class="symbol" id="\exp{x}">$$\exp{x}$$<div/>
+						<div class="symbol" id="\gcd{x}">$$\gcd{x}$$<div/>
+						<div class="symbol" id="\hom{x}">$$\hom{x}$$<div/>
+						<div class="symbol" id="\inf{x}">$$\inf{x}$$<div/>
+						<div class="symbol" id="\ker{x}">$$\ker{x}$$<div/>
+						<div class="symbol" id="\lg{x}">$$\lg{x}$$<div/>
+						<div class="symbol" id="\ln{x}">$$\ln{x}$$<div/>
+						<div class="symbol" id="\log{x}">$$\log{x}$$<div/>
+						<div class="symbol" id="\max{x}">$$\max{x}$$<div/>
+						<div class="symbol" id="\min{x}">$$\min{x}$$<div/>
+						<div class="symbol" id="\sec{x}">$$\sec{x}$$<div/>
+						<div class="symbol" id="a \bmod b">$$a \bmod b$$<div/>
+						<div class="symbol" id="\sin{x}">$$\sin{x}$$<div/>
+						<div class="symbol" id="\sinh{x}">$$\sinh{x}$$<div/>
+						<div class="symbol" id="\sup{x}">$$\sup{x}$$<div/>
+						<div class="symbol" id="\tan{x}">$$\tan{x}$$<div/>
+						<div class="symbol" id="\tanh{x}">$$\tanh{x}$$<div/>
+						<div class="symbol" id="\arccos{x}">$$\arccos{x}$$<div/>
+						<div class="symbol" id="\arcsin{x}">$$\arcsin{x}$$<div/>
+						<div class="symbol" id="\arctan{x}">$$\arctan{x}$$<div/>
+						<div class="symbol" id="\sqrt{x}">$$\sqrt{x}$$<div/>
+						<div class="symbol" id="\sqrt[3]{x}">$$\sqrt[3]{x}$$<div/>
+						
+						<div class="symbol" id="\subset">$$\subset$$<div/>
+						<div class="symbol" id="\supset">$$\supset$$<div/>
+						<div class="symbol" id="\subseteq">$$\subseteq$$<div/>
+						<div class="symbol" id="\supseteq">$$\supseteq$$<div/>
+						<div class="symbol" id="\in">$$\in$$<div/>
+						<div class="symbol" id="\ni">$$\ni$$<div/>
+						
+						<div class="symbol" id="\nless">$$\nless$$<div/>
+						<div class="symbol" id="\ngtr">$$\ngtr$$<div/>
+						<div class="symbol" id="\angle">$$\angle$$<div/>
+						<div class="symbol" id="\thickapprox">$$\thickapprox$$<div/>
+						
+						<div class="symbol" id="\sum">$$\sum$$<div/>
+						<div class="symbol" id="\prod">$$\prod$$<div/>
+						<div class="symbol" id="\int">$$\int$$<div/>
+						<div class="symbol" id="\int_{0}^{3} f(x) dx">$$\int_{0}^{3} f(x) dx$$<div/>
+						<div class="symbol" id="dz = \frac{\partial z}{\partial x} dx + \frac{\partial z}{\partial y} dy ">$$dz = \frac{\partial z}{\partial x} dx + \frac{\partial z}{\partial y} dy $$<div/>
+						<div class="symbol" id="\iint">$$\iint$$<div/>
+						<div class="symbol" id="\iiint">$$\iiint$$<div/>
+						<div class="symbol" id="\oint">$$\oint$$<div/>
+						<div class="symbol" id="\bigcup">$$\bigcup$$<div/>
+						<div class="symbol" id="\bigcap">$$\bigcap$$<div/>
+						<div class="symbol" id="\bigvee">$$\bigvee$$<div/>
+						<div class="symbol" id="\bigwedge">$$\bigwedge$$<div/>
+						<div class="symbol" id="\bigoplus">$$\bigoplus$$<div/>
+						<div class="symbol" id="\bigotimes">$$\bigotimes$$<div/>
+						
+						<div class="symbol" id="\partial">$$\partial$$<div/>
+						<div class="symbol" id="\infty">$$\infty$$<div/>
+						<div class="symbol" id="\lim">$$\lim$$<div/>
+						<div class="symbol" id="\to">$$\to$$<div/>
+						<div class="symbol" id="\lim_{x \to \infty} \left(1 + \frac{1}{n} \right)^n = e">$$\lim_{x \to \infty} \left(1 + \frac{1}{n} \right)^n = e$$<div/>
+						
+						<div class="symbol" id="f'(x)">$$f'(x)$$<div/>
+						
+						<div class="symbol" id="\rbrace">$$\rbrace$$<div/>
+						<div class="symbol" id="\rbrace">$$\rbrace$$<div/>
+						<div class="symbol" id="\rbrace">$$\rbrace$$<div/>
+						
+						<div class="symbol" id="\hat{A}">$$\hat{A}$$<div/>
+						<div class="symbol" id="\check{A}">$$\check{A}$$<div/>
+						<div class="symbol" id="\breve{A}">$$\breve{A}$$<div/>
+						<div class="symbol" id="\acute{A}">$$\acute{A}$$<div/>
+						<div class="symbol" id="\grave{A}">$$\grave{A}$$<div/>
+						<div class="symbol" id="\tilde{A}">$$\tilde{A}$$<div/>
+						<div class="symbol" id="\bar{A}">$$\bar{A}$$<div/>
+						<div class="symbol" id="\vec{A}">$$\vec{A}$$<div/>
+						<div class="symbol" id="\dot{A}">$$\dot{A}$$<div/>
+						<div class="symbol" id="\ddot{A}">$$\ddot{A}$$<div/>
+						
+						<div class="symbol" id="\alpha">$$\alpha$$<div/>
+						<div class="symbol" id="\beta">$$\beta$$<div/>
+						<div class="symbol" id="\gamma">$$\gamma$$<div/>
+						<div class="symbol" id="\delta">$$\delta$$<div/>
+						<div class="symbol" id="\epsilon">$$\epsilon$$<div/>
+						<div class="symbol" id="\vareplison">$$\varepsilon$$<div/>
+						<div class="symbol" id="\zeta">$$\zeta$$<div/>
+						<div class="symbol" id="\eta">$$\eta$$<div/>
+						<div class="symbol" id="\theta">$$\theta$$<div/>
+						<div class="symbol" id="\vartheta">$$\vartheta$$<div/>
+						<div class="symbol" id="\iota">$$\iota$$<div/>
+						<div class="symbol" id="\kappa">$$\kappa$$<div/>
+						<div class="symbol" id="\lambda">$$\lambda$$<div/>
+						<div class="symbol" id="\mu">$$\mu$$<div/>
+						<div class="symbol" id="\nu">$$\nu$$<div/>
+						<div class="symbol" id="\xi">$$\xi$$<div/>
+						<div class="symbol" id="o">$$o$$<div/>
+						<div class="symbol" id="\pi">$$\pi$$<div/>
+						<div class="symbol" id="\varpi">$$\varpi$$<div/>
+						<div class="symbol" id="\rho">$$\rho$$<div/>
+						<div class="symbol" id="\varrho">$$\varrho$$<div/>
+						<div class="symbol" id="\sigma">$$\sigma$$<div/>
+						<div class="symbol" id="\varsigma">$$\varsigma$$<div/>
+						<div class="symbol" id="\tau">$$\tau$$<div/>
+						<div class="symbol" id="\upsilon">$$\upsilon$$<div/>
+						<div class="symbol" id="\phi">$$\phi$$<div/>
+						<div class="symbol" id="\varphi">$$\varphi$$<div/>
+						<div class="symbol" id="\chi">$$\chi$$<div/>
+						<div class="symbol" id="\psi">$$\psi$$<div/>
+						<div class="symbol" id="\omega">$$\omega$$<div/>
+						
+						<div class="symbol" id="\Gamma">$$\Gamma$$<div/>
+						<div class="symbol" id="\Delta">$$\Delta$$<div/>
+						<div class="symbol" id="\Theta">$$\Theta$$<div/>
+						<div class="symbol" id="\Lambda">$$\Lambda$$<div/>
+						<div class="symbol" id="\Xi">$$\Xi$$<div/>
+						<div class="symbol" id="\Pi">$$\Pi$$<div/>
+						<div class="symbol" id="\Sigma">$$\Sigma$$<div/>
+						<div class="symbol" id="\Upsilon">$$\Upsilon$$<div/>
+						<div class="symbol" id="\Phi">$$\Phi$$<div/>
+						<div class="symbol" id="\Psi">$$\Psi$$<div/>
+						<div class="symbol" id="\Omega">$$\Omega$$<div/>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+		<script>
+			function getCaretPos(obj)
+			{
+				obj.focus();
+				if(obj.selectionStart) return obj.selectionStart;
+				else if (document.selection)
+				{
+					var sel = document.selection.createRange();
+					var clone = sel.duplicate();
+					sel.collapse(true);
+					clone.moveToElementText(obj);
+					clone.setEndPoint('EndToEnd', sel);
+					return clone.text.length;
+				}
+				return 0;
+			}
+			function returnvalue(value) 
+			{ 
+				window.opener.document.getElementById('{{ id }}').value=value; 
+				window.opener.focus(); 
+				window.close() 
+			}
+			
+			$(function(){
+				var val = '$$'+$('#formula_latex').val()+'$$';
+				val = encodeURIComponent(val);
+				$("#preview_frame").attr("src", '/mformulas/latex_preview/?val='+val); 
+					
+				$('#return_submit').click(function(){
+					returnvalue($('#formula_latex').val());
+					return false;
+				});
+				$('#preview_bt').click(function(){
+					var val = '$$'+$('#formula_latex').val()+'$$';
+					val = encodeURIComponent(val);
+					$("#preview_frame").attr("src", '/mformulas/latex_preview/?val='+val); 
+					return false;
+				});
+				$('.symbol').click(function(){
+					var text = $('#formula_latex').val();
+					pos = getCaretPos(document.getElementById('formula_latex'));
+					$('#formula_latex').val(text.substring(0,pos)+$(this).attr('id')+text.substring(pos,text.length));
+					return false;
+				});
+			});
+		</script>
+	</body>
+</html>

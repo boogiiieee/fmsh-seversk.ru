@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+{% load mformulas_tags onlineuser_tags invitefriends_tags %}
+
+<html lang="ru">
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		
+		<link rel="SHORTCUT ICON" href="{{ MEDIA_URL }}img/favicon.ico" type="image/x-icon">
+		
+		
+
+		
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/js_for_form.js"></script>
+		
+		<link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}js/scroll/jquery.jscrollpane.css"/>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/scroll/jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/scroll/jquery.jscrollpane.js"></script>
+		
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
+		
+		<link rel="stylesheet" href="{{ MEDIA_URL }}/js/ui/themes/cupertino/jquery-ui-1.8.23.custom.css">
+		<script src="{{ MEDIA_URL }}js/ui/external/jquery.bgiframe-2.1.2.js"></script>
+		<script src="{{ MEDIA_URL }}js/ui/jquery.ui.core.js"></script>
+		<script src="{{ MEDIA_URL }}js/ui/jquery.ui.datepicker.js"></script>
+		<script src="{{ MEDIA_URL }}js/ui/i18n/jquery.ui.datepicker-ru.js"></script>
+		<script src="{{ MEDIA_URL }}js/ui/jquery.ui.widget.js"></script>
+		<script src="{{ MEDIA_URL }}js/ui/jquery.ui.position.js"></script>
+		<script src="{{ MEDIA_URL }}js/ui/jquery.ui.dialog.js"></script>
+
+		
+		{% block script%}{% endblock %}
+		{% MFormulasMedia %}
+		
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/default.css">
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/text.css">
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/lesson.css">
+		<!--[if IE 9]>
+			<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ie9.css" />
+		<![endif]-->
+		<!--[if IE 8]>
+			<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ie8.css" />
+		<![endif]-->
+		<!--[if IE 7]>
+			<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ie7.css" />
+		<![endif]-->
+		
+	</head>
+	
+	<body id="bb">
+		<table id="content_all">
+			<tr height="*">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="50">
+				<td width="*">&nbsp;</td>
+				<td id="top_menu" width="1069" valign="bottom">
+					{% block topmenu %}
+						<ul>
+							<li id="lesson"><a href="/subjects/lesson/"><span>Уроки</span></a></li>
+							<li id="offset"><a href="/subjects/offset/"><span>Сдать зачет</span></a></li>
+							<li id="dictionary"><a href="/dictionary/"><span>Словарь</span></a></li>
+							<li id="training"><a href="/training/"><span>Тренировка</span></a></li>
+							<li id="statistics"><a href="/statistics/"><span>Журнал</span></a></li>
+							<li id="activity"><a href="/activity/"><span>Активность</span></a></li>
+							<li id="actions"><a href="/actions/"><span>Акции</span></a></li>
+							<li id="use"><a href="/subjects/use/"><span>ЕГЭ</span></a></li>
+							<li id="empty"></li>
+						</ul>
+					{% endblock%}
+					<script>
+						var active_url = '/'+location.href.split('/')[3]+'/'+location.href.split('/')[4]+'/';
+						if (!location.href.split('/')[5]){
+							active_url = '/'+location.href.split('/')[3]+'/';
+						};
+						if (active_url != '//'){
+							$('#top_menu ul li a[href*="'+active_url+'"]').parent().addClass('menu_active');
+						} else {
+							$('#top_menu ul li a[href="/subjects/lesson/"]').parent().addClass('menu_active');
+							$('#top_menu ul li a[href="/olympiad/lesson/"]').parent().addClass('menu_active');
+						}
+						$('#lesson.menu_active').parent().parent().css('background','none');
+						$('#olympiad.menu_active').parent().parent().css('background','none');
+					</script>
+				</td>
+				<td width="*">&nbsp;</td>
+			<tr height="487">
+				<td width="*" height="487">&nbsp;</td>
+				<td  id="content" width="1071" height="487" valign="top">
+					<div id="body">
+						<div id="title_page"><h2>{% block title_page %}&nbsp;{% endblock%}</h2></div>
+						{% block all_page %}
+							{% block leftmenu %}
+								<div id="left_menu">
+									<!--предметы-->
+									<div id="l_m_top">&nbsp;</div >
+									<div id="l_m_center">
+										<table class="left_table">
+											<tbody>
+												{% for item in subject_list %}
+													<tr {% if forloop.first %}class="first"{% endif %}>
+														<td class="{% ifequal subject_name item.slug %}sub_menu_active{% endifequal %} {% if forloop.first %}first{% endif %}">{% block leftmenutop %}<a href="/subjects/lesson/?subject_name={{ item.slug }}">{{ item.title }}</a>{% endblock%}</td>
+													</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+
+									<table class="left_table podmenu">
+										<tbody>
+											{% block leftmenubottom %}
+												<tr>
+													<td {% if subject_name %}{% if 'is_development' in put %}{% else %}{% if 'is_mastered' in put %}{% else %}{% if 'bookmark' in put %}{% else %}class="sub_menu_active"{% endif %}{% endif %}{% endif %}{% endif %} id="all">
+														<a href="/subjects/lesson/?{% if subject_name %}subject_name={{ subject_name }}{% endif %}">Все уроки</a>
+													</td>
+												</tr>
+												<tr>
+													<td  {% if 'is_development' in put %}class="sub_menu_active"{% endif %}id="development">
+														<a href="/subjects/lesson/?{% if subject_name %}subject_name={{ subject_name }}&{% endif %}is_development">На освоении</a>
+													</td>
+												</tr>
+												<tr>
+													<td {% if 'is_mastered' in put %}class="sub_menu_active"{% endif %}id="mastered">
+														<a href="/subjects/lesson/?{% if subject_name %}subject_name={{ subject_name }}&{% endif %}is_mastered">Освоенные</a>
+													</td>
+												</tr>
+												<tr>
+													<td {% if 'bookmark' in put %}class="sub_menu_active last"{% endif %} id="bookmark" class="last">
+														<a href="/subjects/lesson/bookmark/?{% if subject_name %}subject_name={{ subject_name }}{% endif %}">Закладки</a>
+													</td>
+												</tr>
+											{% endblock%}
+										</tbody>
+									</table>
+								</div>
+							{% endblock%}
+							
+							<div id="conteyner">
+								{% OnlineUserMedia %}
+								
+								{% block top %}
+									{% include "top.html" %}
+								{% endblock%}
+								
+								<div id="bg_block_content_top">
+									<div>
+										<div>
+											<h3>
+												{% block block_content_top %}&nbsp;{% endblock%}
+												{% block icon %}
+													<a class="show_reg show_hide_1" href="#" title="Показать">Показать</a><br/>
+												{% endblock%}
+											</h3>
+										</div>
+									</div>
+								</div>
+									
+								<div id="block_content" {% if request.user.is_anonymous %}class="min_block_content"{% else %}class="max_block_content"{% endif %}>
+									{% for obj in objs %}
+										<h2>{{ obj.title }}</h2>
+										<p>{{ obj.text|safe|MFormula }}</p>
+										<br/>
+									{% endfor %}
+
+									{% block content %}{% endblock%}
+									
+									{% block rightmenu %}{% endblock %}
+									
+									{% block extra %}{% endblock %}
+									<div class="clr"></div>
+								</div>
+								<div id="bg_block_content_bottom">
+									<div><div>&nbsp;</div></div>
+								</div>
+							</div>
+						{% endblock %}
+					</div>
+				</td>
+				<td width="*" height="487">&nbsp;</td>
+			</tr>
+			<tr height="30" valign="top">
+				<td>&nbsp;</td>
+				<td  id="bottom"><div><div>&nbsp;</div></div></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="10" valign="top">
+				<td>&nbsp;</td>
+				<td><a style="display:block;float:left;" href="http://web-aspect.ru">Разработка сайта: web-aspect.ru</a><a style="display:block;float:right;" href="/olympiad/">&nbsp;Олимпиады</a><a style="display:block;float:right;" href="/">Главная&nbsp;|</a></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="*">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		
+		<div id="dialog_add_bookmarks" title="Закладки" style="display:none">
+			<p>Урок добавлен в закладки.</p>
+		</div>
+		
+		<script>
+			function getClientHeight(){
+			  return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
+			};
+			
+			function getUrlVars(){
+				var vars = [], hash;
+				var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+				for(var i = 0; i < hashes.length; i++)
+				{
+					hash = hashes[i].split('=');
+					vars.push(hash[0]);
+					vars[hash[0]] = hash[1];
+				}
+				return vars;
+			};
+			
+			$(function(){
+				var c = $.cookie('hide_user_anonymous');
+				var tdf = -1;
+				if (c > 0) tdf = 1;
+				if (tdf > 0) {
+					$('#show_hide').parent().css("display", "none");
+					$('#show_hide').parent().next().css("display", "block");
+					$('#block_content').removeClass("min_block_content");
+					$('#block_content').addClass("max_block_content");
+					if (getClientHeight()<799){
+						$('#content_all').addClass('height600');
+						$('#bb').css("min-height", "650px");
+					};
+				}else{
+					$('#show_hide').parent().css("display", "block");
+					$('#show_hide').parent().next().css("display", "none");
+					$('#block_content').removeClass("max_block_content");
+					$('#block_content').addClass("min_block_content");
+					if (getClientHeight()<799){
+						$('#content_all').addClass('height600');
+						$('#bb').css("min-height", "650px");
+					};
+				};
+				
+				$('.show_hide').click(function(){
+					$d3.data('jsp').scrollToY(0)
+					tdf = tdf * (-1);
+					$('#user_anonymous').css("display", "none");
+					$('#user_anonymous').next().css("display", "block");
+					$('#block_content').removeClass("min_block_content");
+					$('#block_content').addClass("max_block_content");
+					if (getClientHeight()<799){
+						$('#content_all').addClass('height600');
+						$('#bb').css("min-height", "650px");
+					};
+					$.cookie('hide_user_anonymous', tdf, {path:'/'});
+					return false;
+				});
+				$('.show_hide_1').click(function(){
+					$d3.data('jsp').scrollToY(0)
+					tdf = tdf * (-1);
+					$('#user_anonymous').css("display", "block");
+					$('#user_anonymous').next().css("display", "none");
+					$('#block_content').removeClass("max_block_content");
+					$('#block_content').addClass("min_block_content");
+					$.cookie('hide_user_anonymous', tdf, {path:'/'});
+					if (getClientHeight()<799){
+						$('#content_all').addClass('height600');
+						$('#bb').css("min-height", "650px");
+					};
+					return false;
+				});
+			});
+		</script>
+	</body>
+</html>

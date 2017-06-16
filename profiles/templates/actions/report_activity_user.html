@@ -1,0 +1,130 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<style>
+	.clr{
+		clear:both;
+		list-style:none;
+		margin-top:20px;
+	}
+	h3{
+		color:#90B0C7;
+	}
+</style>
+	{% if s %}
+		<form action="" method="post">{% csrf_token %}
+			{{ form }}
+			<input type="hidden" name="action" value="ReportActivityUser" />
+			<input type="submit" name="apply" value="Отправить"/>
+		</form>
+		
+		{% for anonymous,statistics in s %}
+			<fieldset class="module aligned">
+				<h2>{{ anonymous }}</h2>
+				<div class="form-row">
+					<div>
+						{% regroup statistics by day as statistics_list %}
+						{% for day in statistics_list %}
+						<div style="width:350px; float:left;">
+							<h3>Статистика за {{ day.grouper|date:"d.m.Y" }}</h3>
+							<ul >
+								<li>
+									<b>Времени на сервисе:&nbsp;</b>
+									<span>{% with day.list|first as item %}{{ item.get_onlineuser.duration_of_visits|default:"0" }}{% endwith %} мин.</span>
+								</li>
+								{% regroup day.list by subject as subject_list %}
+								<li class="clr"></li>
+								
+								<li>
+									<b>Посещений уроков:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.lessons_visited }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li>
+									<b>Пройденно уроков:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.lessons_learned }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li><b>Кол-во попыток выполнения практ. заданий:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.tasks_attempts }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li><b>Выполнено практ. заданий:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.tasks_correct }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li><b>Кол-во попыток выполнения зачетов:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.offsets_attempts }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li><b>Выполнено зачетов:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.offsets_correct }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li><b>Выполнено ЕГЭ:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.use_attempts }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li><b>Выявлено формул:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.added_formulas }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+								
+								<li><b>Выучено формул:</b>
+									<ul>
+										{% for subject in subject_list %}
+											<li>{{ subject.grouper }}: {% with subject.list|first as item %}{{ item.learned_formulas }}{% endwith %}</li>
+										{% endfor %}
+									</ul>
+								</li>
+								<li class="clr"></li>
+							</ul>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</fieldset>
+		{% endfor %}
+	{% else %}
+		Статистики нет.
+	{% endif %}
+{% endblock %}

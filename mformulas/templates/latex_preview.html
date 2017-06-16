@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+{% load mformulas_tags %}
+
+<html lang="ru">
+	<head>
+		<title>Предпросмотр формул Latex</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		
+		<link rel="SHORTCUT ICON" href="{{ MEDIA_URL }}img/favicon.ico" type="image/x-icon">
+
+		{% MFormulasMedia %}
+	</head>
+	
+	<body scroll="no">
+		{{ val }}
+	</body>
+</html>

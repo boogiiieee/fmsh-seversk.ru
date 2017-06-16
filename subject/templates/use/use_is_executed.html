@@ -1,0 +1,33 @@
+{% extends "use/use.html" %}
+	{% block content_text %}
+		{% if obj %}
+			<table id="table_list" width='705px'>
+				<tr>
+					<th class="th_first" width="10px"></th>
+					<th width="450px">ЕГЭ</th>
+					<th  width="150px">Предмет</th>
+					<th  width="60px">Время</th>
+					<th  width="80px">Уровень</th>
+					<th  width="23px">%</th>
+					<th class="th_last" width="10px"></th>
+				</tr>
+				{% for item in obj %}
+					<tr {% if forloop.last %}class="tr_last"{% endif %}>
+						<td class="td_first"></td>
+						<td class="cursor_p">
+							<a href="{{ item.get_absolute_url }}">
+								{{ item.use.title }}
+							</a>
+						</td>
+						<td>{{ item.use.subject.title }}</td>
+						<td>{{ item.use.time }}</td>
+						<td>{{ item.use.level }}</td>
+						<td>{{ item.use.percent }}</td>
+						<td class="td_last" width="10px"></td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% else %}
+			Нет доступных ЕГЭ.
+		{% endif %}
+	{% endblock%}

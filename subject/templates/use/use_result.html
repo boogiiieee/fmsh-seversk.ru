@@ -1,0 +1,41 @@
+{% extends "use/use.html" %}
+{% load mformulas_tags %}
+{% load subject_user_tags %}
+
+{% block title %}Результаты ЕГЭ{% endblock %}
+{% block title_page %}ЕГЭ {{ obj.title }} завершено.{% endblock%}
+{% block block_content_top %}Ваш результат:{% endblock%}
+
+{% block content_text %}
+	<div style="color:#7fc76f;text-align:center">
+		<h2 {% if not uu.use_is_executed %}style="color:red"{% endif %}>Вы набрали <strong>{{ uu.points }}</strong> баллов. Выполнили <strong>{{ uu.get_percent }}%</strong> заданий.</h2>
+	</div>
+	{% if usetasks %}
+		<ul class="list task" style="text-align:left">
+			{% for item in usetasks %}
+				{% ifchanged item.get_task_level %}{% Var 1 %}{% else %}{% IncVar %}{% endifchanged %}
+				<li>
+					<h4 {% if item.is_executed %}class="ok"{% endif %}>
+						{{ item.get_task_level }}{{ varx }}
+						{% if item.is_executed %}<span style="float:right;color:green">&nbsp;Верно!</span>{% else %}<span style="float:right;color:red">&nbsp;Не верно!</span>{% endif %}
+					</h4>
+					<h5>{{ item.task.text_task|safe|MFormula|MFLinjSubject:subject_name }}</h5>
+					
+					<form>
+						<table>
+							{{ item.task|users_answer:item.answer|safe }}
+						</table>
+					</form>
+					
+					{% comment %}
+						{% for item1 in item.task.get_version_answer %}
+							{% ifequal item1.type_answer 'text' %}{% else %}<label for="answer_{{ item1.id }}" tabindex="{{ item1.id }}">{{ item1.answer|safe|MFormula|MFLinjSubject:subject_name }}</label>{% endifequal %}
+							<input id="answer_{{ item1.id }}" {% if item1.is_correctly %}checked="checked"{% endif %} type="{{ item1.type_answer }}" {% ifequal item1.type_answer 'radio' %} name="answer" {% else %} name="answer_{{ item1.id }}" {% endifequal %} {% ifequal item1.type_answer 'text' %}value="{{ item1.answer }}">{% else %}value="{{ item1.answer }}">{% endifequal %}
+						{% endfor %}
+					{% endcomment %}
+					<div class="clr"></div>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock%}

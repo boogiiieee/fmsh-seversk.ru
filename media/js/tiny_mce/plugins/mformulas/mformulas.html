@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{#mformulas_dlg.title}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+	<script type="text/javascript" src="js/dialog.js"></script>
+</head>
+<body>
+
+<form onsubmit="MFormulasDialog.insert();return false;" action="#">
+	<p>
+		<label for="mformulas_id">{#mformulas_dlg.selected_formula}:</label> 
+		<div id="mformulas_id">{#mformulas_dlg.load}</div>
+		<br/>
+		<div>
+			<select name="mformulas_type_link">
+				<option value="0" selected>{#mformulas_dlg.link}</option>
+				<option value="1">{#mformulas_dlg.notlink}</option>
+			</select>
+		</div>
+	</p>
+
+	<div class="mceActionPanel">
+		<input type="button" id="insert" name="insert" value="{#insert}" onclick="MFormulasDialog.insert();" />
+		<input type="button" id="cancel" name="cancel" value="{#cancel}" onclick="tinyMCEPopup.close();" />
+	</div>
+</form>
+
+</body>
+</html>

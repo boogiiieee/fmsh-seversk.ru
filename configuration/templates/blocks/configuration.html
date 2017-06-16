@@ -1,0 +1,37 @@
+{% extends "admin_tools/dashboard/module.html" %}
+{% load i18n %}
+{% block module_content %}
+	<div>
+		<form action="/configuration/form/save/" method="post">{% csrf_token %}
+			<table class="dashboard-module">
+				{{ module.form.form1.as_table }}
+			</table>
+			{{ module.form.formset.management_form }}
+			<ul>
+				<li>
+					<a href="#" onclick="return show_class_config()">{% trans "Show/Hide class' configurations" %}</a>
+				</li>
+			</ul>
+			<ul id="class_config_id" style="display:none">
+				{% for form in module.form.formset.forms %}
+					<li class="{% cycle 'odd' 'even' %}">
+						<table>{{ form.as_table }}</table>
+					</li>
+				{% endfor %}
+			</ul>
+			
+			<input type="submit" value="{% trans "Save" %}" />
+		</form>
+	</div>
+	<script>
+		var change_class_config = -1;
+		function show_class_config(){
+			if (change_class_config < 0)
+				document.getElementById('class_config_id').style.display = 'block';
+			else
+				document.getElementById('class_config_id').style.display = 'none';
+			change_class_config *= -1;
+			return false;
+		}
+	</script>
+{% endblock %}

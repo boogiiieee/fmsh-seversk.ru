@@ -1,0 +1,29 @@
+{% if formulas %}
+	<ul>
+		{% for formula in formulas %}
+			<li>
+				<div class="title_li"><h4>{{ formula.formula.title }}</h4></div>
+				<div id="f_{{formula.formula.id}}" class="formula"><span class="f1">{{ formula.formula.get_formula }}</span><span class="close">&nbsp;</span></div>
+			</li>
+		{% endfor %}
+		<script>
+			$('.right_block ul li .title_li').click(
+				function(){
+					$(this).parent().addClass('hover_formula');
+<<<<<<< local
+					var math = MathJax.Hub.getAllJax($('.f1')[0]);
+					alert(math);
+                    MathJax.Hub.Queue(["Text", math]);
+=======
+					MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+>>>>>>> other
+			});
+			$('.right_block .close').click(
+				function(){
+					$(this).parents('.hover_formula').removeClass('hover_formula');
+				});
+		</script>
+	</ul>
+{% else %}
+	Формул из этого урока в словаре нет.
+{% endif %}

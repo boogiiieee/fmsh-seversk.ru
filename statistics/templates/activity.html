@@ -1,0 +1,61 @@
+{% extends "wide.html" %}
+{% load chart_tags statistics_tags %}
+
+{% block title %}Активность{% endblock %}
+{% block title_page %}Активность пользователей за последние 7 дней.{% endblock%}
+{% block block_content_top %}Активность всех пользователей за последние 7 дней{% endblock%}
+
+{% block content %}
+	<a class="but" id="invitefriend" href="/activity/invitefriend/">Пригласить друга</a>
+	
+	<div class="statistica radius4" style="width:857px;">
+		<h2>Среднее время пребывания на сервисе всех пользователей:</h2> 
+		<ul class="list"><li><h4 style="float:left">Среднее время пребывания на сервисе:</h4>&nbsp;{{ duration_of_visits }} мин. в день</li></ul>
+	</div>
+	
+	{% if activity %}										
+		{% regroup activity by subject as subjects %} 
+		
+		<div class="statistica radius4 f_left" style="width:402px;">
+			<h2>Посещено уроков:</h2>
+			<ul class="list">
+				{% for subject in subjects %}
+					<li><h4 style="float:left">{{ subject.grouper }}:</h4>&nbsp;{{ subject.list|avg_statistics:"lessons_visited" }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="statistica radius4 f_right" style="width:402px;">
+			<h2>Выучено уроков:</h2>
+			<ul class="list">
+				{% for subject in subjects %}
+					<li><h4 style="float:left">{{ subject.grouper }}:</h4>&nbsp;{{ subject.list|avg_statistics:"lessons_learned" }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="statistica radius4 f_left" style="width:402px;">
+			<h2>Выполнено практ. заданий:</h2>
+			<ul class="list">
+				{% for subject in subjects %}
+					<li><h4 style="float:left">{{ subject.grouper }}:</h4>&nbsp;{{ subject.list|avg_statistics:"offsets_correct" }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="statistica radius4 f_right" style="width:402px;">
+			<h2>Выявлено формул:</h2>
+			<ul class="list">
+				{% for subject in subjects %}
+					<li><h4 style="float:left">{{ subject.grouper }}:</h4>&nbsp;{{ subject.list|avg_statistics:"added_formulas" }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="statistica radius4 f_left" style="width:402px;">
+			<h2>Выучено формул:</h2>
+			<ul class="list">
+				{% for subject in subjects %}
+					<li><h4 style="float:left">{{ subject.grouper }}:</h4>&nbsp;{{ subject.list|avg_statistics:"learned_formulas" }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="clr"></div>
+	{% endif %}
+{% endblock%}
